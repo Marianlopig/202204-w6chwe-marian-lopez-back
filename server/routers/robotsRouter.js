@@ -3,10 +3,9 @@ const express = require("express");
 const robot = require("../../db");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+const getRobots = async (req, res) => {
   const robots = await robot.find();
-  debug("Getting the robots");
   res.status(200).json(robots);
-});
-
-module.exports = router;
+};
+router.get("/", getRobots);
+module.exports = { router, getRobots };
