@@ -6,9 +6,10 @@ const initializeServer = require("./initializeServer");
 const { router: robotsRouter } = require("./routers/robotsRouter");
 
 const app = express();
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/robots", robotsRouter);
-app.use(cors());
+
 
 initializeServer(app, process.env.SERVER_PORT || 4000);
