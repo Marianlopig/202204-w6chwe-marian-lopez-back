@@ -1,4 +1,4 @@
-const { getRobots } = require("./robotsRouter");
+const { getRobots, deleteRobot } = require("./robotsRouter");
 
 const expectedRobotList = [
   {
@@ -10,7 +10,11 @@ const expectedRobotList = [
     toughness: 2,
   },
 ];
-jest.mock("../../db", () => ({ find: jest.fn(() => expectedRobotList) }));
+const mockDelete = jest.fn();
+jest.mock("../../db", () => ({
+  find: jest.fn(() => expectedRobotList),
+  deleteOne: jest.fn((object) => mockDelete(object)),
+}));
 
 describe("Given a getRobots funtion", () => {
   describe("When it is called", () => {
@@ -33,6 +37,30 @@ describe("Given a getRobots funtion", () => {
       await getRobots(null, res);
 
       expect(res.json).toHaveBeenCalledWith(expectedRobotList);
+    });
+  });
+});
+
+describe("Given a deleteRobot funtion", () => {
+  describe("When it is called with an id 3", () => {
+    test("Then it should return a json with an id 3 and a status 200", async () => {
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      const expectedStatus = 200;
+      const expectedIdRobotDeleted = { _id: "3" };
+      const req = {
+        params: {
+          idRobot: "3",
+        },
+      };
+
+      await deleteRobot(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+      expect(res.json).toHaveBeenCalledWith(expectedIdRobotDeleted);
+      expect(mockDelete).toHaveBeenCalledWith(expectedIdRobotDeleted);
     });
   });
 });
