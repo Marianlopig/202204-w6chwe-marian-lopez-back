@@ -17,7 +17,7 @@ const deleteRobot = async (req, res) => {
 const createRobot = async (req, res) => {
   const newRobot = req.body;
   const createdRobot = await robot.create(newRobot);
-  res.status(201).json(createdRobot.json());
+  res.status(201).json(createdRobot);
 };
 
 router.get("/", getRobots);
