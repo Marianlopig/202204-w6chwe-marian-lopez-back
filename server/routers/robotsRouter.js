@@ -14,7 +14,14 @@ const deleteRobot = async (req, res) => {
   res.status(200).json({ _id: idRobot });
 };
 
+const createRobot = async (req, res) => {
+  const newRobot = req.body;
+  const createdRobot = await robot.create(newRobot);
+  res.status(201).json(createdRobot.json);
+};
+
 router.get("/", getRobots);
 router.delete("/delete/:idRobot", deleteRobot);
+router.create("/create", createRobot);
 
-module.exports = { router, getRobots, deleteRobot };
+module.exports = { router, getRobots, deleteRobot, createRobot };
