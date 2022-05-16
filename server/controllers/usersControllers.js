@@ -1,17 +1,14 @@
 const jwt = require("jsonwebtoken");
-const myUserId = "1";
-const myUserName = "Marian";
-const myPassword = "password";
+const User = require("../../db/models/User");
 
 const userLogin = async (req, res) => {
   const { username, password } = req.body;
-  if (username === myUserName && password === myPassword) {
+  const user = await User.findOne({ username: username, password: password });
+  if (user) {
     const token = jwt.sign(
-      { id: myUserId, username },
+      { id: user._id, username: user.username },
       process.env.TOKEN_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      { expiresIn: "7d" }
     );
     res.status(200).json({ token });
   } else {
