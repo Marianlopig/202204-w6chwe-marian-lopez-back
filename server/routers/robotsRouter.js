@@ -1,6 +1,7 @@
 const debug = require("debug")("robots:router");
 const express = require("express");
 const robot = require("../../db");
+const { auth } = require("../middlewares/auth");
 const router = express.Router();
 
 const getRobots = async (req, res) => {
@@ -21,7 +22,7 @@ const createRobot = async (req, res) => {
 };
 
 router.get("/", getRobots);
-router.delete("/delete/:idRobot", deleteRobot);
-router.post("/create", createRobot);
+router.delete("/delete/:idRobot", auth, deleteRobot);
+router.post("/create", auth, createRobot);
 
 module.exports = { router, getRobots, deleteRobot, createRobot };
